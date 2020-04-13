@@ -22,3 +22,5 @@ You must install :
   You can use data.get('e2d70964-fc75-4115-b7ee-cf73f842aaf3'). To get an object holding this user's values such as username password etc. { username: ' ... }
   
   All that needs to be done is routing and handlebars html for user pages dispalying thier information. 
+  
+  Oh also everytime you run this program the registered users are deleted, so each time the cache of userdata is cleared on startup.
