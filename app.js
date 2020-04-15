@@ -31,6 +31,10 @@ app.use(express.urlencoded({
     extended: false
 }));
 
+
+//delete database for testing
+//data.clear()
+
 app.route('/user/login')
     .get((req, res) => {
         res.render('login', {
@@ -50,10 +54,12 @@ app.route('/user/login')
         }
         
         if(!(user_key === undefined) && JSON.stringify(data.get(user_key).password) === JSON.stringify(req.body.password)){
-            res.render('login', {
-                alert: { level: 'success', title: 'Login Success!', 
-                    message: 'Congratulations' } 
-            })
+            //res.render('login', {
+            //    alert: { level: 'success', title: 'Login Success!', 
+            //       message: 'Congratulations' } 
+            //})
+            console.log(user_key)
+            res.redirect('/user/'+user_key);
         }
         else{
             res.render('login', {
@@ -110,7 +116,7 @@ app.route('/user/new')
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
-                phone: req.phone_number
+                tel: req.body.tel
             })
 
             res.render('register', {
@@ -121,6 +127,70 @@ app.route('/user/new')
 
     });
 
+    
+    app.route('/user/:user_id') 
+    .get((req, res) => {
+
+        let user_ID = req.params.user_id;
+
+        let found_user = false;
+        let userValues;
+        for (const [key, values] of data){
+            console.log(key)
+            if(key === user_ID){
+                 found_user = true;
+                 userValues  = values;   
+            }
+        }
+
+        console.log(userValues);
+
+        if(found_user)
+            res.render('register', {
+                
+                fillin: { username: userValues.username,
+                            email: userValues.email,
+                            password: userValues.password,
+                            tel: userValues.tel}
+
+            })
+        else
+        res.render('failed', {
+            alert: { level: 'warning', title: '404 Not Found Error', 
+                message: 'Resource not found' } 
+        })
+            
+        
+    })
+    .post((req, res) => {
+        // some debug info
+        console.log(req.body);
+
+        let found_username = false;
+        let user_ID;
+        for (const [key, values] of data){
+            console.log(key)
+            if(values.username === req.body.username){
+                unique_username = true;
+                userID = key;
+            }
+        }
+
+        if(found_username)
+            res.render('register', {
+                username: userID.body.username,
+                email: userID.body.email,
+                password: userID.body.password,
+                tel: userID.tel
+            })
+        else
+        res.render('failed', {
+            alert: { level: 'warning', title: '404 Not Found Error', 
+                message: 'Resource not found' } 
+        })
+
+    });
+    
 
     //any route not routed give 404
     app.route('/*')
@@ -134,5 +204,4 @@ app.route('/user/new')
 
 app.listen(3000, () => {
     console.log('express app running at http://localhost:3000/')
-    data.clear()
 });

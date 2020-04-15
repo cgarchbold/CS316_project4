@@ -21,6 +21,9 @@
       <div class="form-group">
         <label for="username">Username</label>
         <input
+          {{#if fillin}}
+            placeholder = {{fillin.username}}
+          {{/if}} 
           type="username"
           class="form-control"
           id="username"
@@ -32,6 +35,9 @@
       <div class="form-group">
         <label for="email">Email</label>
         <input
+          {{#if fillin}}
+            placeholder = {{fillin.email}}
+          {{/if}} 
           type="email"
           class="form-control"
           id="email"
@@ -43,6 +49,9 @@
       <div class="form-group">
         <label for="password">Password</label>
         <input
+          {{#if fillin}}
+            placeholder = {{fillin.password}}
+          {{/if}}
           type="password"
           class="form-control"
           id="password"
@@ -53,6 +62,9 @@
       <div class="form-group">
         <label for="verified_password">Verify Password</label>
         <input
+          {{#if fillin}}
+            placeholder = {{fillin.password}}
+          {{/if}}
           type="password"
           class="form-control"
           id="verified_password"
@@ -62,12 +74,15 @@
       </div>
 
       <div class="form-group">
-        <label for="phone_number">Phone Number</label>
+        <label for="tel">Phone Number</label>
         <input
+          {{#if fillin}}
+            placeholder = {{fillin.tel}}
+          {{/if}}
           type="tel"
           class="form-control"
-          id="phone_number"
-          name="phone_number"
+          id="tel"
+          name="tel"
           required
         />
       </div>
