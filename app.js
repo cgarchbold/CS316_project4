@@ -15,6 +15,8 @@ const handlebars_inst = handlebars.create({
 });
 
 
+//This project was worked on by Cohen Archbold and Zach Gilbert
+
 // create our express app
 const app = express();
 
@@ -35,6 +37,8 @@ app.use(express.urlencoded({
 //delete database for testing
 //data.clear()
 
+
+//login page route
 app.route('/user/login')
     .get((req, res) => {
         res.render('login', {
@@ -48,20 +52,17 @@ app.route('/user/login')
 
         //loop and find the key (user_id) with this username
         for (const [key, values] of data){
-            console.log(key)
             if(values.username === req.body.username)
                 user_key = key;
         }
         
+        //if key was found and password was correct
         if(!(user_key === undefined) && JSON.stringify(data.get(user_key).password) === JSON.stringify(req.body.password)){
-            //res.render('login', {
-            //    alert: { level: 'success', title: 'Login Success!', 
-            //       message: 'Congratulations' } 
-            //})
-            console.log(user_key)
+            //redirect to user page
             res.redirect('/user/'+user_key);
         }
         else{
+            //give alert
             res.render('login', {
                 alert: { level: 'danger', title: 'Login Fail', 
                     message: 'Username/Password does not match' } 
@@ -69,6 +70,8 @@ app.route('/user/login')
         }
     });
 
+
+//new user page route
 app.route('/user/new')
     .get((req, res) => {
         res.render('register', {
@@ -128,23 +131,24 @@ app.route('/user/new')
     });
 
     
+    //user page route
     app.route('/user/:user_id') 
     .get((req, res) => {
 
+        //get request param
         let user_ID = req.params.user_id;
 
+        //look for user
         let found_user = false;
         let userValues;
         for (const [key, values] of data){
-            console.log(key)
             if(key === user_ID){
                  found_user = true;
                  userValues  = values;   
             }
         }
 
-        console.log(userValues);
-
+        //display filled out register page when found
         if(found_user)
             res.render('register', {
                 
@@ -163,35 +167,10 @@ app.route('/user/new')
         
     })
     .post((req, res) => {
-        // some debug info
-        console.log(req.body);
-
-        let found_username = false;
-        let user_ID;
-        for (const [key, values] of data){
-            console.log(key)
-            if(values.username === req.body.username){
-                unique_username = true;
-                userID = key;
-            }
-        }
-
-        if(found_username)
-            res.render('register', {
-                username: userID.body.username,
-                email: userID.body.email,
-                password: userID.body.password,
-                tel: userID.tel
-            })
-        else
-        res.render('failed', {
-            alert: { level: 'warning', title: '404 Not Found Error', 
-                message: 'Resource not found' } 
-        })
-
+        
     });
-    
 
+    
     //any route not routed give 404
     app.route('/*')
     .get((req, res) => {
